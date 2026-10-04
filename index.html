@@ -96,7 +96,7 @@ details.vo{margin-bottom:6px}details.vo summary{color:var(--mu);font-size:12px;p
   <span>Row</span><button class="g2" onclick="sz('rh0',-4)">-</button><button class="g2" onclick="sz('rh0',4)">+</button>
   <button class="g2" onclick="loadNom()" style="margin-left:auto">Load nominal roll</button></div></details>
   <div class="sheet"><div id="tbl"></div></div>
-  <p class="hint">Date/Name header-la irukkura kodai (|) izhuthaal column size maarum (double-tap = reset). Oru naal 2 paagam: cell-oda mela = Morning, keezha = Evening. Sentry/Wait/Week off Evening-la pottaa adutha naal Morning-layum thaanaave varum. Ground-ku vandha morning-la 'Ground' nu varum. Cell thattunga, keezha duty pick pannunga (S1-S4, Wait, Roll, Week, CMT, DC, AC, Water, Mess, OD). Ground = roll call ground mark (G). CMT/DC/AC/Water/Mess/OD pottaa month muzhukka fill aagum (Month: ON). Type pannavum mudiyum (Type button). Row number thattina andha row height maarum.</p>
+  <p class="hint">Date/Name header-la irukkura kodai (|) izhuthaal column size maarum (double-tap = reset). Oru naal 2 paagam: cell-oda mela = Morning, keezha = Evening. Sentry/Wait/Week off Evening-la pottaa adutha naal Morning-layum thaanaave varum. Ground-ku vandha morning-la 'Ground' nu varum. Cell thattunga, keezha duty pick pannunga (S1-S4, Wait, Roll, Week, Coy duty, Course, Mt duty, Others). Ground = roll call ground mark (G). Coy duty/Course/Mt duty/Others rendu half-laiyum varum; 'Month: ON' pannina month muzhukka fill aagum. Type pannavum mudiyum (Type button). Row number thattina andha row height maarum.</p>
 </section>
 
 <section id="p2" style="display:none">
@@ -119,7 +119,7 @@ details.vo{margin-bottom:6px}details.vo summary{color:var(--mu);font-size:12px;p
   <div id="ipv"></div>
   <div class="row"><button class="btn sec" onclick="closeImp()">Close</button><button class="btn" onclick="applyImp()">Apply</button></div>
 </div></div>
-<div class="pal" id="pal"><button data-v="S1">S1</button><button data-v="S2">S2</button><button data-v="S3">S3</button><button data-v="S4">S4</button><button data-v="Wait">Wait</button><button data-v="Roll">Roll</button><button data-v="Week">Week</button><button data-v="CMT">CMT</button><button data-v="DC">DC</button><button data-v="AC">AC</button><button data-v="Water">Water</button><button data-v="Mess">Mess</button><button data-v="OD">OD</button><button data-v="g" class="gb">Ground</button><button data-v="month" class="on">Month: ON</button><button data-v="x" class="x">Clear</button><button data-v="type">Type</button></div>
+<div class="pal" id="pal"><button data-v="S1">S1</button><button data-v="S2">S2</button><button data-v="S3">S3</button><button data-v="S4">S4</button><button data-v="Wait">Wait</button><button data-v="Roll">Roll</button><button data-v="Week">Week</button><button data-v="Coy">Coy duty</button><button data-v="Course">Course</button><button data-v="MT">Mt duty</button><button data-v="Others">Others</button><button data-v="g" class="gb">Ground</button><button data-v="month">Month: OFF</button><button data-v="x" class="x">Clear</button><button data-v="type">Type</button></div>
 <datalist id="dl"></datalist>
 <script>/** @license
  *
@@ -526,9 +526,12 @@ var S={names:[],dates:[],cells:{},cols:{},rh:{},pl:{}},uid=0;
 try{var r=localStorage.getItem('duty1');if(r)S=JSON.parse(r)}catch(e){}
 S.names=S.names||[];S.dates=S.dates||[];S.cells=S.cells||{};S.cols=S.cols||{};S.rh=S.rh||{};S.pl=S.pl||{};S.cwd=S.cwd||{};S.gr=S.gr||{};S.pm=S.pm||{};['cells','pm'].forEach(function(m){for(var k in S[m])if(S[m][k]==='Roll call')S[m][k]='Roll'});S.cwd=S.cwd||{};
 function nid(){return 'p'+Date.now().toString(36)+(uid++)}
-while(S.names.length<45)S.names.push({id:nid(),n:''});
-var NOM=["HAV-6279 Mathiyalagan", "HAV-837 Murugan", "HAV-2780 Senthil Kumar", "HAV-2827 Mahalingam", "HAV-3136 Ganapathy", "HAV-4479 Jegadeeswaran", "HAV-3820 Palani Muthu", "HAV-2298 Prakash Kumar", "HAV-4026 Satheesh", "HAV-3918 Anand", "HAV-3712 Suresh Kumar", "PC-3931 Sekar", "PC-4398 Ajith Kumar", "PC-4389 Loganathan", "PC-4303 Karthick Raja", "PC-4420 Raj Kumar", "PC-4155 Santhana Prabhu", "PC-4855 Karthick Raja", "PC-4923 Deivam", "PC-4301 Santhosh Kumar", "PC-4152 Rajadurai", "PC-4160 Vignesh", "PC-4329 Ramesh", "PC-4330 Sundara Manikandan", "PC-4181 Balamurugan", "PC-4186 Karthick", "PC-4213 Bharath", "PC-4824 Senthil Kumar", "PC-4678 Aravinth Kumar", "PC-4768 Muthuchamy", "PC-4532 Arun Kumar", "PC-4681 Shahul Hameed", "PC-4983 Manikandan", "PC-5042 Raj Kumar", "PC-4684 Jegadheesan", "PC-5097 Balamurugan", "PC-4553 Alex Pandi", "PC-4636 Rathna Giri", "PC-5103 Karthick", "PC-4536 Karan", "PC-4857 Seenivasan", "PC-4522 Vignesh Pandiyan", "PC-4227 Pradeep", "PC-4694 Abinesh", "PC-4575 Rajendra Prasad"];
-if(!S.names.some(function(x){return x.n.trim()}))NOM.forEach(function(n,i){S.names[i].n=n});
+var NOM=["HAV-3136 Ganapathy", "HAV-2298 Prakash Kumar", "HAV-4026 Satheesh", "HAV-3918 Anand", "HAV-3712 Suresh Kumar", "PC-3931 Sekar", "PC-4398 Ajith Kumar", "PC-4389 Loganathan", "PC-4855 Karthick Raja", "PC-4301 Santhosh Kumar", "PC-4329 Ramesh", "PC-4186 Karthick", "PC-4213 Bharath", "PC-4824 Senthil Kumar", "PC-4678 Aravinth Kumar", "PC-4681 Shahul Hameed", "PC-4684 Jegadheesan", "PC-5097 Balamurugan", "PC-4636 Rathna Giri", "PC-5103 Karthick", "PC-4536 Karan", "PC-4857 Seenivasan", "PC-4227 Pradeep", "PC-4694 Abinesh", "PC-4575 Rajendra Prasad"];
+function numOf(n){var m=(n||'').match(/\d{3,4}/);return m?m[0]:''}
+function applyRoster(){var old={};S.names.forEach(function(p){var k=numOf(p.n);if(k&&!old[k])old[k]=p});S.names=NOM.map(function(n){var o=old[numOf(n)];return {id:o?o.id:nid(),n:n}})}
+if(S.nomver!==4){applyRoster();S.nomver=4}
+['cells','pm'].forEach(function(m){for(var k in S[m]){var v=String(S[m][k]).toLowerCase();if(['cmt','dc','ac','water lorry','mess','od'].indexOf(v)>-1)S[m][k]='Others'}});
+try{localStorage.setItem('duty1',JSON.stringify(S))}catch(e){}
 var now=new Date(),P2=function(n){return String(n).padStart(2,'0')};
 var TD=now.getFullYear()+'-'+P2(now.getMonth()+1)+'-'+P2(now.getDate());
 S.month=TD.slice(0,7);
@@ -545,11 +548,11 @@ function fc(h){var a=rgb(h);return (a[0]*299+a[1]*587+a[2]*114)/1000>150?'#111':
 function tarr(h){return rgb(h).map(function(c){return Math.round(255-(255-c)*0.3)})}
 function tint(h){return 'rgb('+tarr(h).join(',')+')'}
 function norm(v){return String(v||'').toLowerCase().replace(/\s+/g,' ').replace(/\s*-\s*/g,'-').trim()}
-var CAN=['1st sentry','2nd sentry','3rd sentry','4th sentry','Waiting','Roll','Week off','CMT','DC','AC','Water lorry','Mess','OD'],SH=['S1','S2','S3','S4','Wait','Roll','Week','CMT','DC','AC','Water','Mess','OD'],MOS=['cmt','dc','ac','mess','od','water lorry'];
+var CAN=['1st sentry','2nd sentry','3rd sentry','4th sentry','Waiting','Roll','Week off','Coy duty','Course','Mt duty','Others'],SH=['S1','S2','S3','S4','Wait','Roll','Week','Coy','Course','MT','Others'],MOS=['coy duty','course','mt duty','others'];
 function shortV(v){var k=CAN.indexOf(v);return k>-1?SH[k]:v}
-var ALI={'s1':0,'s2':1,'s3':2,'s4':3,'wait':4,'roll':5,'week':6,'1st':0,'2nd':1,'3rd':2,'4th':3,'rc':5,'wo':6,'cmt':7,'dc':8,'ac':9,'water lorry':10,'mess':11,'od':12};
+var ALI={'s1':0,'s2':1,'s3':2,'s4':3,'wait':4,'roll':5,'week':6,'1st':0,'2nd':1,'3rd':2,'4th':3,'rc':5,'wo':6,'coy duty':7,'coy':7,'course':8,'mt duty':9,'mt':9,'others':10,'other':10};
 function expand(v){var k=ALI[v.trim().toLowerCase()];return k===undefined?v:CAN[k]}
-function kind(v){v=norm(v);if(!v||v==='off')return '';if(v.indexOf('week')>-1)return 'wo';if(v.indexOf('roll')>-1)return 'rc';if(v.indexOf('wait')>-1)return 'w';if(MOS.indexOf(v)>-1||v.indexOf('water')>-1)return 'mo';var m=v.match(/([1-4])(st|nd|rd|th)/);return m?'s'+m[1]:'o'}
+function kind(v){v=norm(v);if(!v||v==='off')return '';if(v.indexOf('week')>-1)return 'wo';if(v.indexOf('roll')>-1)return 'rc';if(v.indexOf('wait')>-1)return 'w';if(MOS.indexOf(v)>-1)return 'mo';var m=v.match(/([1-4])(st|nd|rd|th)/);return m?'s'+m[1]:'o'}
 var UNIT='MT GROUP TSP 6TH BN, MDU';var MNS=['January','February','March','April','May','June','July','August','September','October','November','December'],L=['','S1','S2','S3','S4'];
 function mlabel(){var y=S.month.split('-');return MNS[+y[1]-1]+' '+y[0]}
 function gv(key,h){return (h?S.pm[key]:S.cells[key])||''}
@@ -567,7 +570,7 @@ function cvals(pid,d){return [carried(pid,d)?'':(S.cells[pid+'|'+d]||''),S.pm[pi
 function findDups(){var out=[];S.names.forEach(function(p,i){var g={};S.dates.forEach(function(d,j){var seen={};dvals(p.id+'|'+d).forEach(function(raw){raw=raw.trim();var k=kind(raw);if(!k||k==='rc'||k==='wo'||k==='mo')return;var v=norm(raw);if(seen[v])return;seen[v]=1;var o=(g[v]=g[v]||{label:raw,ds:[],ix:[]});o.ds.push(d);o.ix.push(j)})});for(var k in g){var q=g[k],n=1;for(var t=1;t<q.ix.length;t++)if(q.ix[t]!==q.ix[t-1]+1)n++;if(n>1)out.push({p:p,nm:p.n.trim()||('Row '+(i+1)),label:q.label,ds:q.ds,n:n})}});return out}
 function dupSet(dl){var D={};dl.forEach(function(e){e.ds.forEach(function(d){D[e.p.id+'|'+d]=1})});return D}
 function groups(dl){dl.sort(function(a,b){return b.n-a.n});var by={},ord=[];dl.forEach(function(e){var k=e.p.id;if(!by[k]){by[k]={nm:e.nm,items:[]};ord.push(by[k])}by[k].items.push(e)});return ord}
-function moLabel(v){v=norm(v);if(v.indexOf('water')>-1)return 'Water lorry';return v==='mess'?'Mess':v.toUpperCase()}
+function moLabel(v){v=norm(v);for(var i=7;i<CAN.length;i++)if(CAN[i].toLowerCase()===v)return CAN[i];return v}
 function absData(){var rows=[],t={c:0,w:0,r:0,o:0};S.names.forEach(function(p,i){var n={s1:0,s2:0,s3:0,s4:0,w:0,rc:0,wo:0},mv={};S.dates.forEach(function(d){var seen={},woD=false;cvals(p.id,d).forEach(function(v){var k=kind(v);if(k==='mo'){var l=moLabel(v);if(!seen[l]){seen[l]=1;mv[l]=(mv[l]||0)+1}}else if(k==='wo')woD=true;else if(n[k]!==undefined)n[k]++});if(woD)n.wo++});var c=n.s1+n.s2+n.s3+n.s4,mk=Object.keys(mv);if(!c&&!n.w&&!n.rc&&!n.wo&&!mk.length&&!p.n.trim())return;var br=[1,2,3,4].filter(function(k){return n['s'+k]}).map(function(k){return L[k]+' x'+n['s'+k]}).concat(mk.map(function(l){return l+' x'+mv[l]})).join(', ');t.c+=c;t.w+=n.w;t.r+=n.rc;t.o+=n.wo;rows.push([p.n.trim()||('Row '+(i+1)),br,c,n.w,n.rc,n.wo])});rows.sort(function(a,b){return b[2]-a[2]||(b[3]+b[4])-(a[3]+a[4])});return{rows:rows,t:t}}
 function lowData(){var all=[],tot=0;S.names.forEach(function(p){if(!p.n.trim())return;var c=0,w=0,r=0,mo=0;S.dates.forEach(function(d){cvals(p.id,d).forEach(function(v){var k=kind(v);if(k==='rc')r++;else if(k==='w')w++;else if(k==='mo')mo++;else if(/^s[1-4]$/.test(k))c++})});if(mo>0)return;tot+=c;all.push([p.n.trim(),c,w,r])});var avg=all.length?tot/all.length:0;return{low:all.filter(function(a){return a[1]<avg}).sort(function(a,b){return a[1]-b[1]}),avg:avg,tot:tot}}
 function prevDay(d){var t=new Date(d+'T00:00:00');t.setDate(t.getDate()-1);return t.getFullYear()+'-'+P2(t.getMonth()+1)+'-'+P2(t.getDate())}
@@ -611,7 +614,7 @@ function applyVars(){var r=document.documentElement.style;r.setProperty('--cw',(
 function togShort(){S.short=!S.short;S.cwd={};save();applyVars();buildDl();draw()}
 var DEFS={cw:72,nw:160,rh0:20},LIM={cw:[36,200],nw:[90,260],rh0:[18,60]};
 function sz(k,d){S[k]=Math.min(LIM[k][1],Math.max(LIM[k][0],(S[k]||DEFS[k])+d));if(k==='cw')S.cwd={};save();applyVars();draw()}
-function loadNom(){if(!confirm('45 names replace aagum (row order-padi). Duty data maaraadhu. Continue?'))return;NOM.forEach(function(n,i){S.names[i].n=n});save();draw()}
+function loadNom(){if(!confirm('Nominal roll 25 names-ku maarum. Remove panna 20 names poidum. Continue?'))return;applyRoster();save();draw()}
 function filt(){var q=document.getElementById('q').value.toLowerCase().trim();document.querySelectorAll('tr[data-i]').forEach(function(tr){var n=(S.names[+tr.dataset.i].n||'').toLowerCase();tr.style.display=(!q||n.indexOf(q)>-1)?'':'none'})}
 function tab(n){showPal(false);document.getElementById('p1').style.display=n===1?'':'none';document.getElementById('p2').style.display=n===2?'':'none';document.getElementById('t1').classList.toggle('on',n===1);document.getElementById('t2').classList.toggle('on',n===2)}
 var T=document.getElementById('tbl'),RZ=null;
@@ -645,12 +648,10 @@ function parseDuty(t){
     if(/week\s*-?\s*off|weekoff|w\/o/.test(low))mode=val='Week off';
     else if(/roll\s*-?\s*call|\bparade\b/.test(low))mode=val='Roll';
     else if(/\bwaiting\b/.test(low))mode=val='Waiting';
-    else if(/\bcmt\b/.test(low))mode=val='CMT';
-    else if(/\bdc\b/.test(low))mode=val='DC';
-    else if(/\bac\b/.test(low))mode=val='AC';
-    else if(/water\s*lorry/.test(low))mode=val='Water lorry';
-    else if(/\bmess\b/.test(low))mode=val='Mess';
-    else if(/\bod\b/.test(low))mode=val='OD';
+    else if(/\bcoy\s*duty\b/.test(low))mode=val='Coy duty';
+    else if(/\bcourse\b/.test(low))mode=val='Course';
+    else if(/\bmt\s*duty\b/.test(low))mode=val='Mt duty';
+    else if(/\bothers?\b/.test(low))mode=val='Others';
     else kw=false;
     if(!kw&&STM&&/^\d{1,2}\s*[.)]\s*\S/.test(l)){mode='';val='';rest=''}
     else if(!kw){
@@ -721,7 +722,7 @@ async function readPhotoText(f){
     if(!window.Tesseract)throw new Error('no ocr');
     var base=new URL('ocr/',document.baseURI).href.replace(/\/$/,'');
     var w=await Tesseract.createWorker('eng',1,{workerPath:base+'/worker.min.js',corePath:base,langPath:base,gzip:true,workerBlobURL:false});
-    var r2=await w.recognize(f);await w.terminate();OCRFUZZY=true;return r2.data.text;
+    var r2=await w.recognize(f);await w.terminate();return r2.data.text;
   }catch(e){throw new Error(why||'photo read aagala')}
 }
 async function photo(inp){
@@ -762,7 +763,7 @@ async function exportXlsx(){
   add('Daily abstract',[['Date','Duty illa count','Duty illa','Week off']].concat(dayData().map(function(x){return[fd(x[0]),x[1].length,x[1].join(', '),x[2].join(', ')]})),[8,14,90,40]);
   await saveFile(fname('xlsx'),XLSX.write(wb,{bookType:'xlsx',type:'array'}));
 }
-function pshort(v){var k=kind(v);return k===''?'':k==='o'?String(v).slice(0,6):k==='mo'?moLabel(v).replace('Water lorry','Water'):{s1:'S1',s2:'S2',s3:'S3',s4:'S4',w:'Wait',rc:'Roll',wo:'Week'}[k]}
+function pshort(v){var k=kind(v);return k===''?'':k==='o'?String(v).slice(0,6):k==='mo'?shortV(moLabel(v)):{s1:'S1',s2:'S2',s3:'S3',s4:'S4',w:'Wait',rc:'Roll',wo:'Week'}[k]}
 function ptable(doc,title,heads,rows,w){
   var m=12,y=m,rh=6.4;
   function head(){doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(100,110,125);doc.text(UNIT,m,y+3);y+=5;doc.setFontSize(11);doc.setTextColor(15,42,74);doc.text(title,m,y+4);y+=8;var x=m;doc.setFontSize(8.5);heads.forEach(function(h,k){doc.setFillColor(226,232,242);doc.setDrawColor(150,160,175);doc.setLineWidth(.15);doc.rect(x,y,w[k],rh,'FD');doc.setTextColor(17,17,17);doc.text(h,x+1.5,y+4.4);x+=w[k]});y+=rh}
@@ -800,7 +801,7 @@ function showPal(on){pal.classList.toggle('on',on);document.body.classList.toggl
 pal.addEventListener('mousedown',function(e){e.preventDefault()});
 document.addEventListener('focusin',function(e){var t=e.target;if(t.matches&&t.matches('#tbl td[data-k] input')){PALI=t;t.dataset.prev=gv(t.closest('td').dataset.k,+t.dataset.h);showPal(true)}else if(!pal.contains(t))showPal(false)});
 document.addEventListener('focusout',function(e){var t=e.target;if(TYPING){TYPING=false;return}if(t===PALI&&t.getAttribute('inputmode')!=='none')t.setAttribute('inputmode','none')});
-var MFILL=true;
+var MFILL=false;
 function monthFill(r,val){var p=S.names[r];S.dates.forEach(function(d,j){var key=p.id+'|'+d;[0,1].forEach(function(h){var cur=gv(key,h);if(!cur||kind(cur)==='mo'){sv(key,h,val);var inp=T.querySelector('input[data-r="'+r+'"][data-c="'+(j+1)+'"][data-h="'+h+'"]');if(inp)inp.value=val?(S.short?shortV(val):val):''}})})}
 pal.addEventListener('click',function(e){var b=e.target.closest('button');if(!b||!PALI)return;var v=b.dataset.v,t=PALI;
   if(v==='type'){t.setAttribute('inputmode','text');TYPING=true;t.blur();t.focus();return}
